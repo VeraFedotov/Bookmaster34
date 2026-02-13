@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Bookmaster34.View.Windows;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -23,6 +24,8 @@ namespace Bookmaster34
 
         private void LoginMi_Click(object sender, RoutedEventArgs e)
         {
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.ShowDialog();
 
         }
 
