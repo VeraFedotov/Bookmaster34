@@ -23,7 +23,7 @@
                 <MenuItem Name="LogoutMi" Click="LogoutMi_Click"  Header="Выход из системы" Visibility="Collapsed"/>
                 <MenuItem Name="CloseAppMi" Click="CloseAppMi_Click" Header="Закрыть приложение"/>
             </MenuItem>
-            <MenuItem Header="Библиотека">
+            <MenuItem Name="LibraryMi" Visibility="Collapsed" Header="Библиотека">
                 <MenuItem Name="BrowseCatalogMI" Header="Просмотр каталога" Click="BrowseCatalogMI_Click"/>
                 <MenuItem Name="ManageCustomersMI" Header="Управление читателями" Click="ManageCustomersMI_Click"/>
                 <MenuItem Name="CirculationMI" Header="Управление абонементом" Click="CirculationMI_Click"/>
@@ -32,8 +32,8 @@
             </MenuItem>
         </Menu>
 
-                <!--Фрэйм (Принимает и отображает страницы)-->
-        
-        
+        <!--Фрэйм (Принимает и отображает страницы)-->
+        <Frame Name="MainFrame" Grid.Row="2" />
+
     </Grid>
 </Window>
