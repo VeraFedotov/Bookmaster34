@@ -8,5 +8,6 @@
         Title="LoginWindow" Height="450" Width="800">
     <Grid>
         <Button Name="LoginBtn" Content="Войти" Click="LoginBtn_Click"/>
+        
     </Grid>
 </Window>
