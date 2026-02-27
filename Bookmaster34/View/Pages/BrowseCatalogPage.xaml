@@ -50,5 +50,60 @@
                     Content="Поиск" Click="SearchBtn_Click"/>
 
         </Grid>
+
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="15"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            
+            <!--Результаты поиска -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+
+                <ListView Name="BookAuthorsLv">
+                    
+                </ListView>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Страница" />
+
+                    <Button Name="PreviousPageBtn" Grid.Column="2" Content="&lt;" Click="PreviousPageBtn_Click"/>
+
+                    <TextBox Name="CurrentPageTb" Grid.Column="4"/>
+
+                    <Button Name="NextPageBtn" Grid.Column="6" Content="&gt;"/>
+
+                    <TextBlock Name="TotalPagesTbl" Grid.Column="8" Text="из 4"/>
+                    <TextBlock Name="TotalBooksTbl" Grid.Column="12" Text="153 книги найдено"/>
+                </Grid> 
+            </Grid>
+            
+            <!--Изменение размеров гридов -->
+            
+            
+            <!--Информация о выбранной книге -->
+        </Grid>
     </Grid>
 </Page>
