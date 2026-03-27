@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Bookmaster34.AppData;
+using Bookmaster34.Models;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Bookmaster34.View.Windows
 {
@@ -26,9 +16,62 @@ namespace Bookmaster34.View.Windows
 
         private void LoginBtn_Click(object sender, RoutedEventArgs e)
         {
-            // DialogResult возвращает результат работы диалогового окна
-            DialogResult = true;
+            if (Validate())
+            {
 
+                Administrator administrator = App.GetContext().Administrators.FirstOrDefault(
+                    administrator => administrator.Username == LoginTb.Text && administrator.Password ==
+                    PasswordPb.Password);
+                if (administrator != null)
+                {
+                    if (RememberMeCb.IsChecked == true) CredentialsService.SaveCredentials(LoginTb.Text, PasswordPb.Password);
+                    else CredentialsService.ClearCredentials();
+                        FeedbackService.Information("Успешная авторизация.");
+
+                    // DialogResult возвращает результат работы диалогового окна
+                    DialogResult = true;
+                }
+
+                else
+                {
+                    FeedbackService.Error("Пользователь не найден.");
+                }
+                CredentialsService.Administrator = administrator;
+            }
+
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+        }
+
+        private bool Validate()
+        {
+            if (string.IsNullOrWhiteSpace(LoginTb.Text))
+            {
+                FeedbackService.Warning("Введите логин.");
+                LoginTb.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(PasswordPb.Password))
+            {
+                FeedbackService.Warning("Введите пароль.");
+                PasswordPb.Focus();
+                return false;
+            }
+            return true;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (CredentialsService.AutoLogin && !string.IsNullOrWhiteSpace(CredentialsService.SavedLogin))
+            {
+                LoginTb.Text = CredentialsService.SavedLogin;
+                PasswordPb.Password = CredentialsService.SavedPassword;
+                RememberMeCb.IsChecked = CredentialsService.AutoLogin;
+            }
         }
     }
 }
