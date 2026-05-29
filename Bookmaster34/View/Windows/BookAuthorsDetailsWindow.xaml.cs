@@ -41,6 +41,8 @@ namespace Bookmaster34.View.Windows
 
             if (AuthorsCmb.SelectedItem is BookAuthor bookAuthor)
             {
+                Title = $"Авторы книги: {bookAuthor.Book.Title}";
+
                 if (string.IsNullOrWhiteSpace(bookAuthor.Author.Wikipedia))
                 {
                     // Прячем гипурссылку
