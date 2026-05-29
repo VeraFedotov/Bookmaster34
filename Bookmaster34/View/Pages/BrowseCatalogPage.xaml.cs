@@ -1,4 +1,5 @@
-﻿using Bookmaster34.Models;
+﻿using Bookmaster34.AppData;
+using Bookmaster34.Models;
 using Bookmaster34.View.Windows;
 using System;
 using System.Collections.Generic;
@@ -23,35 +24,57 @@ namespace Bookmaster34.View.Pages
     public partial class BrowseCatalogPage : Page
     {
         // Создаем локальный список для единоразового вытягивания данных из таблицы БД
-        private readonly List<Book> _books;
+        private List<Book> _books;
 
         // Создаем поле для хранения выбранной книги;
         private Book _selectedBook;
+
+        //Создаём контроллер пагинации
+        private readonly PaginationController _paginationController = new();
 
         public BrowseCatalogPage()
         {
             InitializeComponent();
 
-            // Заполняем локальный список
-            _books = App.GetContext().Books.ToList();
+            //Загружаем в контроллер пагинации список книг
+            _paginationController.Load(App.GetContext().Books.ToList());
 
-            LoadData();
+            //Обновляем интерфейс
+            RefreshUI();
         }
 
         private void SearchBtn_Click(object sender, RoutedEventArgs e)
         {
+            SearchResultsGrid.Visibility = Visibility.Visible;
 
+            string bookTitle = BookTitleTb.Text;
+            string bookAuthors = BookAuthorsTb.Text;
+            string bookSubjects = BookSubjectsTb.Text;
+
+            if (string.IsNullOrWhiteSpace(bookTitle) &&
+                string.IsNullOrWhiteSpace(bookAuthors) &&
+                string.IsNullOrWhiteSpace(bookSubjects))
+            {
+                RefreshUI();
+            }
+            else 
+            {
+                List<Book> filteredBooks = _books.Where(book => 
+                book.Title.Contains(bookTitle, StringComparison.OrdinalIgnoreCase) &&
+                book.Authors.Contains(bookAuthors, StringComparison.OrdinalIgnoreCase)&&
+                book.Subjects.Contains(bookSubjects, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+                RefreshUI();
+            }
+
+               
         }
 
         private void PreviousPageBtn_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void LoadData()
-        {
-            BookAuthorsLv.ItemsSource = _books;
-
+            _paginationController.GoToPage(_paginationController.CurrentPage + 1);
+            RefreshUI();
         }
 
         private void BookAuthorsLv_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -59,6 +82,15 @@ namespace Bookmaster34.View.Pages
             _selectedBook = (Book)BookAuthorsLv.SelectedItem;
 
             BookDetailsGrid.DataContext = _selectedBook;
+
+            if(_selectedBook == null)
+            {
+                BookDetailsGrid.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                BookDetailsGrid.Visibility = Visibility.Visible;
+            }
         }
 
         private void BookAuthorsDetailsHl_Click(object sender, RoutedEventArgs e)
@@ -67,6 +99,32 @@ namespace Bookmaster34.View.Pages
             {
                 BookAuthorsDetailsWindow bookAuthorsDetailsWindow = new BookAuthorsDetailsWindow(_selectedBook.BookAuthors);
                 bookAuthorsDetailsWindow.ShowDialog();
+            }
+        }
+
+        public void RefreshUI()
+        {
+            BookAuthorsLv.ItemsSource = _paginationController.GetCurrentPage();
+            TotalBooksTbl.Text = $"Найдено {_paginationController.BooksCount} книг";
+            TotalPagesTbl.Text = $"из {_paginationController.TotalPages}";
+            CurrentPageTb.Text = _paginationController.CurrentPage.ToString();
+
+            PreviousPageBtn.IsEnabled = _paginationController.CanGoPrevious;
+            NextPageBtn.IsEnabled= _paginationController.CanGoNext;
+        }
+
+        private void NextPageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _paginationController.GoToPage(_paginationController.CurrentPage + 1);
+            RefreshUI();
+        }
+
+        private void CurrentPageTb_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (int.TryParse(CurrentPageTb.Text, out int page))
+            {
+                _paginationController.CurrentPage = page;
+                RefreshUI();
             }
         }
     }

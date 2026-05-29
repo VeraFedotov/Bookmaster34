@@ -16,7 +16,8 @@
         </Grid.ColumnDefinitions>
         
         <!-- Панель поиска -->
-        <Grid Margin="20">
+        <Border Background="{DynamicResource Gray}">
+            <Grid Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="10"/>
@@ -31,27 +32,29 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="30"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             
             <Image Grid.ColumnSpan="3" Source="/Resources/logo.png" />
 
             <TextBlock Grid.Row="2" Text="Название:" />
-            <TextBox Grid.Row="2" Grid.Column="2"/>
+            <TextBox Grid.Row="2" Grid.Column="2" Name="BookTitleTb"/>
 
             <TextBlock Grid.Row="4" Text="Авторы:" />
-            <TextBox Grid.Row="4" Grid.Column="2"/>
+            <TextBox Grid.Row="4" Grid.Column="2" Name="BookAuthorsTb"/>
 
             <TextBlock Grid.Row="6" Text="Жанры:" />
-            <TextBox Grid.Row="6" Grid.Column="2"/>
+            <TextBox Grid.Row="6" Grid.Column="2" Name="BookSubjectsTb"/>
 
             <Button Name="SearchBtn" Grid.Row="8" Grid.Column="2"
                     Content="Поиск" Click="SearchBtn_Click"/>
 
         </Grid>
- 
-        <Grid Grid.Column="2" Margin="0 20 20 20">
+        </Border>
+
+        <Grid Name="SearchResultsGrid" Visibility="Collapsed" 
+            Grid.Column="2" Margin="0 20 20 20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="15"/>
@@ -66,6 +69,7 @@
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
 
+                
                 <ListView Name="BookAuthorsLv" SelectionChanged="BookAuthorsLv_SelectionChanged" >
                    <!-- Создаем заголовки для таблицы -->
                     <ListView.View>
@@ -97,9 +101,9 @@
 
                     <Button Name="PreviousPageBtn" Grid.Column="2" Content="&lt;" Click="PreviousPageBtn_Click"/>
 
-                    <TextBox Name="CurrentPageTb" Grid.Column="4"/>
+                    <TextBox Name="CurrentPageTb" Grid.Column="4" TextChanged="CurrentPageTb_TextChanged"/>
 
-                    <Button Name="NextPageBtn" Grid.Column="6" Content="&gt;"/>
+                    <Button Name="NextPageBtn" Grid.Column="6" Content="&gt;" Click="NextPageBtn_Click"/>
 
                     <TextBlock Name="TotalPagesTbl" Grid.Column="8" Text="из 4"/>
                     
@@ -108,17 +112,17 @@
             </Grid>
             
             <!--Изменение размеров гридов -->
-            
-            
+            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch"/>
+
             <!--Информация о выбранной книге -->
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2" Name="BookDetailsGrid" Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="10"/>
                     <ColumnDefinition Width="300"/>
                 </Grid.ColumnDefinitions>
                 <!--Текстовая информация-->
-                <Grid Name="BookDetailsGrid">
+                <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="10"/>
